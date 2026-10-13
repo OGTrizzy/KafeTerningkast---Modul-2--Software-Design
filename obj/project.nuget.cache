@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "UIWPCx5JQQY=",
+  "success": true,
+  "projectFilePath": "/home/trizzy/Projects/KafeTerningkast/KafeTerningkast.csproj",
+  "expectedPackageFiles": [
+    "/home/trizzy/.nuget/packages/microsoft.aspnetcore.app.internal.assets/10.0.11/microsoft.aspnetcore.app.internal.assets.10.0.11.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,99 @@
+@page "/games"
+@rendermode InteractiveServer
+@using KafeTerningkast.Models
+@using KafeTerningkast.Services
+@inject GameCatalog Catalog
+
+<PageTitle>Spillbua - Kafe Terningkast</PageTitle>
+
+<h1>Spillbua</h1>
+<p class="text-muted">Finn ditt neste brettspill!</p>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <label class="form-label" for="search">Søk etter spill</label>
+        <input id="search" 
+               class="form-control" 
+               placeholder="Søk etter spill..." 
+               @bind="searchText"
+               @bind:event="oninput"/>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label" for="players">Antall spillere</label>
+        <input id="players"
+               type="number"
+               class="form-control"
+               min="1"
+               @bind="playerFilter"
+               @bind:event="oninput"/>
+        <div class="form-text"> la stå tomt for å vise alle spill</div>
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="button" class="btn btn-primary w-100" @onclick="RollDice">kast terningen</button>
+    </div>
+</div>
+
+<p class="fw-semibold">Antall spill funnet: @FilteredGames.Count()</p>
+
+@if (FilteredGames.Count == 0)
+{
+    <div class="alert alert-info">
+        ingen spill funnet, prøv å endre søket
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var game in FilteredGames)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="@(highlightedId == game.Id ? "border border-3 border-primary rounded" : "")">
+                    <GameCard Game="@game" />
+                </div>
+            </div>
+        }
+    </div>
+}
+@code {
+    private string searchText ="";
+    private string playerFilter = "";
+    private int? highlightedId;
+    private List<BoardGame> allGames = [];
+
+    protected override void OnInitialized()
+    {
+        allGames = Catalog.GetAll().ToList();
+    }
+
+    private IReadOnlyList<BoardGame> FilteredGames => GetFilteredGames();
+
+    private List<BoardGame> GetFilteredGames()
+    {
+        IEnumerable<BoardGame> query = allGames;
+
+        if (!string.IsNullOrWhiteSpace(searchText))
+        {
+            query = query.Where(g => g.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (int.TryParse(playerFilter, out int players) && players > 0)
+        {
+            query = query.Where(g => g.MinPlayers <= players && g.MaxPlayers >= players);
+        }
+
+        return query.ToList();
+    }
+
+    private void RollDice()
+    {
+        var matches = GetFilteredGames();
+        if (matches.Count == 0)
+        {
+            highlightedId = null;
+            return;
+        }
+
+        var index = Random.Shared.Next(matches.Count);
+        highlightedId = matches[index].Id;
+    }
+}

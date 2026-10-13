@@ -1,0 +1,42 @@
+<div class="dice-rating d-inline-flex gap-1 align-items-center" role="group" aria-label="Terningkast">
+    @for (int i = 1; i <= 6; i++) 
+    {
+        var pip = i;
+        <button type="button"
+                class="btn btn-sm @(IsSelected(pip) ? "btn-warning" : "btn-outline-secondary")"
+                disabled="@ReadOnly"
+                @onclick="() => OnPipClicked(pip)">
+            @pip
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Value { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ValueChanged { get; set; }
+
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    private bool IsSelected(int pip)
+    {
+        var shown = Clamp(Value);
+        return shown == pip;
+    }
+
+    private async Task OnPipClicked(int pip)
+    {
+        if (ReadOnly)
+            return;
+
+        var next = Clamp(pip);
+        if (next != Value)
+            await ValueChanged.InvokeAsync(next);
+    }
+
+    // verdier under 1 og over 6 blir klampet til 1 og 6
+    private static int Clamp(int value) => value < 1 ? 1 : value> 6 ? 6 : value;
+}
