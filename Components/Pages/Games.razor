@@ -48,7 +48,7 @@ else
         {
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="@(highlightedId == game.Id ? "border border-3 border-primary rounded" : "")">
-                    <GameCard Game="@game" />
+                    <GameCard Game="@game" OnAddToGameNight="HandleAddToGameNight"/>
                 </div>
             </div>
         }
@@ -63,6 +63,17 @@ else
     protected override void OnInitialized()
     {
         allGames = Catalog.GetAll().ToList();
+    }
+
+    private string? statusMessage;
+    private void HandleAddToGameNight(BoardGame game)
+    {
+        statusMessage = $"Spillet '{game.Name}' ble lagt til spillelisten!";
+    }
+
+    @if (!string.IsNullOrEmpty(statusMessage))
+    {
+        <div class="alert alert-success">@statusMessage</div>
     }
 
     private IReadOnlyList<BoardGame> FilteredGames => GetFilteredGames();
