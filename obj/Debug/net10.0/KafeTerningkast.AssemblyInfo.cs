@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KafeTerningkast")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9e9c01792eb3e713a31cfce74e49af3d10569ee4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6a2f235a4b4de2e50b0b27c4cf29c8e6a73216d1")]
 [assembly: System.Reflection.AssemblyProductAttribute("KafeTerningkast")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KafeTerningkast")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -9,6 +9,11 @@
 <h1>Spillbua</h1>
 <p class="text-muted">Finn ditt neste brettspill!</p>
 
+@if (!string.IsNullOrEmpty(statusMessage))
+{
+    <div class="alert alert-success">@statusMessage</div>
+}
+
 <div class="row g-3 mb-4">
     <div class="col-md-6">
         <label class="form-label" for="search">Søk etter spill</label>
@@ -69,11 +74,6 @@ else
     private void HandleAddToGameNight(BoardGame game)
     {
         statusMessage = $"Spillet '{game.Name}' ble lagt til spillelisten!";
-    }
-
-    @if (!string.IsNullOrEmpty(statusMessage))
-    {
-        <div class="alert alert-success">@statusMessage</div>
     }
 
     private IReadOnlyList<BoardGame> FilteredGames => GetFilteredGames();
