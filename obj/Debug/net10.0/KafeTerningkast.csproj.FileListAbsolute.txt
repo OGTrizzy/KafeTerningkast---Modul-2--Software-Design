@@ -83,3 +83,4 @@
 /home/trizzy/Projects/KafeTerningkast/obj/Debug/net10.0/KafeTerningkast.pdb
 /home/trizzy/Projects/KafeTerningkast/obj/Debug/net10.0/KafeTerningkast.genruntimeconfig.cache
 /home/trizzy/Projects/KafeTerningkast/obj/Debug/net10.0/ref/KafeTerningkast.dll
+/home/trizzy/Projects/KafeTerningkast/obj/Debug/net10.0/KafeTerningkast.sourcelink.json
