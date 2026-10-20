@@ -31,3 +31,22 @@ dotnet run
 ### GameCard
 - Parameter: Game
 - EventCallback Onaddtogamenight - kortet eier ikke spillekveld logikk
+
+## oppgave 3
+
+### lokal vs applikasjon tilstand
+- lokal - søketekst og spill filter på games
+- applikasjons tilstand - gamenightstate, beholder data når man navigerer siden, relevant data vil bli delt med hverandre på diverse sider
+
+### designvalg
+1. parametere og eventcallback gjennom mange lag - tungvint når alle sidene trenger samme data
+2. cascading values - er bra nok for lesing, blir fort mer knotete for oppdateringer fra flere steder
+3. tilstandstjeneste - en tydelig hjem, bruker inject der man trenger det, "changed" event for ui oppdatering (valgte dette)
+
+### levetid - scoped
+- samme side - beholder tilstand ved navigering
+- flere sider - hver fane / side får egen scoped instans, listene er ikke delt (ikke testet)
+- flere brukere - alle brukere får eget handling, dataen deles ikke mellom brukere
+
+### abonnement
+komponenter abonnerer på "changed" og melder seg av i "dispose" / "idisposable"
