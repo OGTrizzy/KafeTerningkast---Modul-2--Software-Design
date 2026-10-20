@@ -4,6 +4,8 @@
 @using KafeTerningkast.Services
 @inject GameCatalog Catalog
 @inject NavigationManager Navigation
+@inject GameNightState GameNight
+@implements IDisposable
 
 <PageTitle>@(game?.Name ?? "Spill") - Kafe Terningkast</PageTitle>
 
@@ -63,6 +65,24 @@ else
     protected override void OnInitialized()
     {
         LoadGame();
+        GameNight.Changed += OnGameNightChanged;
+    }
+
+    private void OnGameNightChanged() => InvokeAsync(StateHasChanged);
+
+    private void AddToGameNight()
+    {
+        if (game is null) return;
+
+        if(GameNight.Add(game))
+            statusMessage = $"{game.Name} er lagt til.";
+        else
+            statusMessage = $"{game.Name} er allerede lagt til";
+    }
+
+    public void Dispose()
+    {
+        GameNight.Changed -= OnGameNightChanged;
     }
 
     protected override void OnParametersSet()

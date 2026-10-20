@@ -3,6 +3,8 @@
 @using KafeTerningkast.Models
 @using KafeTerningkast.Services
 @inject GameCatalog Catalog
+@inject GameNightState GameNight
+@implements IDisposable
 
 <PageTitle>Spillbua - Kafe Terningkast</PageTitle>
 
@@ -68,12 +70,23 @@ else
     protected override void OnInitialized()
     {
         allGames = Catalog.GetAll().ToList();
+        GameNight.Changed += OnGameNightChanged;
     }
+
+    private void OnGameNightChanged() => InvokeAsync(StateHasChanged);
 
     private string? statusMessage;
     private void HandleAddToGameNight(BoardGame game)
     {
-        statusMessage = $"Spillet '{game.Name}' ble lagt til spillelisten!";
+        if (GameNight.Add(game))
+            statusMessage = $"{game.Name} er lagt til spillelisten!";
+        else
+            statusMessage = $"{game.Name} er allerede i spillelisten!";
+    }
+
+    public void Dispose()
+    {
+        GameNight.Changed -= OnGameNightChanged;
     }
 
     private IReadOnlyList<BoardGame> FilteredGames => GetFilteredGames();
