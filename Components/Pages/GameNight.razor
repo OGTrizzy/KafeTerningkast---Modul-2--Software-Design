@@ -1,10 +1,55 @@
 @page "/game-night"
 @rendermode InteractiveServer
+@using KafeTerningkast.Services
+@inject GameNightState GameNight
+@implements IDisposable
 
 <PageTitle>Spillekveld</PageTitle>
 
 <h1>Spillekveld</h1>
 
+<p class="fw-semibold">
+    Antall spill: @GameNight.Count - Samlet spilletid: @GameNight.TotalPlayTimeMinutes min
+</p>
+
+@if (GameNight.Count == 0)
+{
+    <div class="alert alert-info">
+        ingen spill valgt
+    </div>
+}
+else
+{
+    <ul class="list-group mb-3">
+        @foreach (var game in GameNight.SelectedGames)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@game.Name</strong>
+                    <span class="text-muted"> . @game.PlayTimeMinutes min</span>
+                </div>
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm"
+                        @onclick="() => Remove(game.Id)">
+                    fjern
+                </button>
+            </li>
+        }
+    </ul>
+}
+
 @code {
-    
+    protected override void OnInitialized()
+    {
+        GameNight.Changed += OnChanged;
+    }
+
+    private void OnChanged() => InvokeAsync(StateHasChanged);
+
+    private void Remove(int gameId) => GameNight.Remove(gameId);
+
+    public void Dispose()
+    {
+        GameNight.Changed -= OnChanged();
+    }
 }
