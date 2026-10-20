@@ -16,9 +16,19 @@
         
         <div class="d-flex gap-2 mt-auto">
             <a class="btn btn-outline-primary btn-sm" href="@($"/games/{Game.Id}")">Se mer</a>
-            <button type="button" class="btn btn-success btn-sm" @onclick="OnAddClicked">
-                Legg til spille listen
-            </button>
+
+            @if (IsSelected)
+            {
+                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                    Valgt
+                </button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-success btn-sm" @onclick="OnAddClicked">
+                    Legg til spille listen
+                </button>
+            }
         </div>
     </div>
 </div>
@@ -26,6 +36,9 @@
 @code {
     [Parameter, EditorRequired]
     public BoardGame Game { get; set; } = default!;
+
+    [Parameter]
+    public bool IsSelected { get; set; }
 
     [Parameter]
     public EventCallback<BoardGame> OnAddToGameNight { get; set; }

@@ -1,11 +1,15 @@
 using KafeTerningkast.Components;
+using KafeTerningkast.Components.Pages;
+using KafeTerningkast.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+//scoped = one instance per user session, singleton = one instance for all users
 builder.Services.AddSingleton<KafeTerningkast.Services.GameCatalog>();
+builder.Services.AddScoped<GameNightState>();
 
 var app = builder.Build();
 
