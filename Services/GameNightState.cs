@@ -7,7 +7,7 @@ public class GameNightState
     private readonly List<BoardGame> _selected = [];
     public event Action? Changed;
     public IReadOnlyList<BoardGame> SelectedGames => _selected;
-    public int Court => _selected.Count;
+    public int Count => _selected.Count;
     public int TotalPlayTimeMinutes => _selected.Sum(g => g.PlayTimeMinutes);
     public bool Contains(int gameId) => _selected.Any(g => g.Id == gameId);
 

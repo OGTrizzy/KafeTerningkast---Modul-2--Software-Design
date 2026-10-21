@@ -97,12 +97,6 @@ else
         statusMessage = null;
     }
 
-    private void AddToGameNight()
-    {
-        if (game is null) return;
-        statusMessage = $"{game.Name} er lagt til i spillkvelden";
-    }
-
     private void GoBack()
     {
         Navigation.NavigateTo("/games");
