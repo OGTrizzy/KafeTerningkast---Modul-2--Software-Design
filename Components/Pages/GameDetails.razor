@@ -2,14 +2,25 @@
 @rendermode InteractiveServer
 @using KafeTerningkast.Models
 @using KafeTerningkast.Services
-@inject GameCatalog Catalog
+@inject GameApiClient Api
 @inject NavigationManager Navigation
 @inject GameNightState GameNight
 @implements IDisposable
 
 <PageTitle>@(game?.Name ?? "Spill") - Kafe Terningkast</PageTitle>
 
-@if (game is null)
+@if (isLoading)
+{
+    <p>laster spill</p>
+}
+else if (errorMessage is not null)
+{
+    <div class="alert alert-danger">
+        @errorMessage
+    </div>
+    <a href="/games" class="btn btn-link">Gå tilbake til spillbua</a>
+}
+else if (game is null)
 {
     <div class="alert alert-warning">
         Fant ikke spillet med id @Id
@@ -34,14 +45,20 @@ else
         <dt class="col-sm-3">Terningkast</dt>
         <dd class="col-sm-9">
             <DiceRating @bind-Value="game.Rating" ReadOnly="false" />
-            <span class="ms-2 text-muted">(nb: fikser senere)</span>
         </dd>
     </dl>
 
     <div class="d-flex gap-2">
+        @if (GameNight.Contains(game.Id))
+        {
+            <button type="button" class="btn btn-secondary" disabled>allerede valgt</button>
+        }
+        else
+        {
         <button type="button" class="btn btn-success" @onclick="AddToGameNight">
             Legg til
         </button>
+        }
         <button type="button" class="btn btn-outline-secondary" @onclick="GoBack">
             Tilbake
         </button>
@@ -61,11 +78,33 @@ else
 
     private BoardGame? game;
     private string? statusMessage;
+    private string? errorMessage;
+    private bool isLoading = true;
 
     protected override void OnInitialized()
     {
-        LoadGame();
         GameNight.Changed += OnGameNightChanged;
+    }
+
+    private async Task LoadGameAsync()
+    {
+        isLoading = true;
+        errorMessage = null;
+        statusMessage = null;
+        game = null;
+
+        try
+        {
+            game = await Api.GetByIdAsync(Id);
+        }
+        catch
+        {
+            errorMessage = "kunne ikke hente spill";
+        }
+        finally
+        {
+            isLoading = false;
+        }
     }
 
     private void OnGameNightChanged() => InvokeAsync(StateHasChanged);
@@ -85,16 +124,10 @@ else
         GameNight.Changed -= OnGameNightChanged;
     }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {   
-        //laster inn på nytt hvis Id endres til annen spill
-        LoadGame();
-    }
-
-    private void LoadGame()
-    {
-        game = Catalog.GetAll().FirstOrDefault(g => g.Id == Id);
-        statusMessage = null;
+        //laster inn på nytt hvis Id endres til annen spill og når siden åpner
+        await LoadGameAsync();
     }
 
     private void GoBack()

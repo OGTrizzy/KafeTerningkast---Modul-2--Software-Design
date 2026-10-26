@@ -34,6 +34,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9HYW1lQ2FyZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/trizzy/Projects/KafeTerningkast/Components/Pages/AdminGames.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BZG1pbkdhbWVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/trizzy/Projects/KafeTerningkast/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
